@@ -1,0 +1,13 @@
+[package]
+name = "password_storage"
+version = "0.1.0"
+authors = ["Sanjay K <sanjaykdragon@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ureq = { version = "*", features = ["json"] }
+serde = { version = "*", features = ["derive"] }
+serde_json = "*"
+chrono = "*"
