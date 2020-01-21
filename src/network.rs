@@ -9,7 +9,7 @@ pub struct CredentialList {
     pub values: Vec<Credential>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Default)]
 pub struct Credential {
     pub username: String,
     pub password: String,
@@ -29,7 +29,7 @@ pub struct WebStorage {
 
 impl WebStorage {
     pub fn send_credentials(&self, creds: Credential) {
-        let path_to_post = format!("{}test.php", self.base_url);
+        let path_to_post = self.base_url.clone() + "test.php";
         let resp = ureq::post(
             path_to_post.as_str()
         ).send_json(
@@ -40,6 +40,8 @@ impl WebStorage {
                 "option" : "save" //save credentials to db
             })
         );
+
+        
         if resp.ok() {
             let response_str = resp.into_string().expect("unable to turn request into str");
             println!("{}", response_str);
@@ -50,7 +52,7 @@ impl WebStorage {
     }
 
     fn get_credentials_list(&self) -> String {
-        let path_to_post = format!("{}test.php", self.base_url);
+        let path_to_post = self.base_url.clone() + "test.php";
         let resp = ureq::post(
             path_to_post.as_str()
         ).send_json(

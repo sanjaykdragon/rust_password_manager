@@ -1,4 +1,3 @@
-extern crate chrono;
 use std::time::{SystemTime, UNIX_EPOCH, Duration};
 
 pub fn get_epoch_time() -> u64 {
@@ -16,7 +15,7 @@ pub fn get_input(prompt: &str) -> String{
         Ok(_goes_into_input_above) => {},
         Err(_no_updates_is_fine) => {},
     }
-    return input.trim().to_string();
+    return input.trim_end().to_string();
 }
 
 pub fn get_readable_time(epoch_time: u64) -> String {
