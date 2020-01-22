@@ -19,7 +19,9 @@ pub struct Credential {
 
 impl fmt::Display for Credential {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "[{}] user: {} | pass: {} | site: {}", utils::get_readable_time(self.time.parse::<u64>().expect("unable to parse time")), self.username, self.password, self.site)
+        let time_num: u64 = self.time.parse().expect("self.time is invalid, needed u64");
+        let readable_time = utils::get_readable_time(time_num);
+        write!(f, "[{}] user: {} | pass: {} | site: {}", readable_time, self.username, self.password, self.site)
     }
 }
 
@@ -74,10 +76,10 @@ impl WebStorage {
 
     pub fn get_creds(&self) -> Option<Vec<Credential>> {
         let response_string = self.get_credentials_list();
-        let resp_str_slice = response_string.as_str();
-        let response: serde_json::Value = serde_json::from_str(resp_str_slice).expect("failed to convert to json");
+        let response_as_str = response_string.as_str();
+        let response: serde_json::Value = serde_json::from_str(response_as_str).expect("failed to convert to json");
         if response["status"] == "success" {
-            let return_val: CredentialList = serde_json::from_str(resp_str_slice).expect("failed to convert to json");
+            let return_val: CredentialList = serde_json::from_str(response_as_str).expect("failed to convert to json");
             return Some(return_val.values);
         }
         else {
