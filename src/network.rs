@@ -53,7 +53,7 @@ impl WebStorage {
         }
     }
 
-    fn get_credentials_list(&self) -> String {
+    fn get_credentials_list(&self) -> Option<String> {
         let path_to_post = self.base_url.clone() + "test.php";
         let resp = ureq::post(
             path_to_post.as_str()
@@ -65,18 +65,23 @@ impl WebStorage {
 
         if resp.ok() {
             let return_val = resp.into_string().expect("unable to unwrap string, server returned something weird?");
-            return return_val;
+            return Some(return_val);
         }
         else {
             println!("server returned error code {}", resp.status());
-            let return_val = "{\"status\": \"error\"}";
-            return String::from(return_val);
+            return None;
         }
     }
 
     pub fn get_creds(&self) -> Option<CredentialList> {
-        let response_string = self.get_credentials_list();
+        let response = self.get_credentials_list();
+        if response.is_none() {
+            return None;
+        }
+
+        let response_string = response.unwrap();
         let response_as_str = response_string.as_str();
+
         let response: serde_json::Value = serde_json::from_str(response_as_str).expect("failed to convert to json");
         if response["status"] == "success" {
             let return_val: CredentialList = serde_json::from_str(response_as_str).expect("failed to convert to json");
