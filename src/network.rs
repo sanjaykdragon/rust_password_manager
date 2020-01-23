@@ -74,13 +74,13 @@ impl WebStorage {
         }
     }
 
-    pub fn get_creds(&self) -> Option<Vec<Credential>> {
+    pub fn get_creds(&self) -> Option<CredentialList> {
         let response_string = self.get_credentials_list();
         let response_as_str = response_string.as_str();
         let response: serde_json::Value = serde_json::from_str(response_as_str).expect("failed to convert to json");
         if response["status"] == "success" {
             let return_val: CredentialList = serde_json::from_str(response_as_str).expect("failed to convert to json");
-            return Some(return_val.values);
+            return Some(return_val);
         }
         else {
             return None;

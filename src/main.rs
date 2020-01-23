@@ -14,7 +14,7 @@ fn main() {
             let first_char = command.chars().next().expect("invalid first char?");
             if first_char == 'g' {
                 let creds = match api.get_creds() {
-                    Some(val) => val,
+                    Some(val) => val.values, //get the Vec<Credentials> out of the CredentialList
                     None => Default::default(),
                 };
                 
